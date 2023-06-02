@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pixels/pixels.dart';
 import 'package:pixels/src/pixel_image.dart';
 import 'package:pixels/src/pixel_palette.dart';
 
@@ -126,6 +127,9 @@ class PixelImageController extends ValueNotifier<_PixelImageValue> {
   /// The palette of the [EditablePixelImage] controlled by the controller.
   final PixelPalette? palette;
 
+  /// The custom color gradient
+  final Color Function(double y)? customGradientEquation;
+
   /// Height in pixels of the [EditablePixelImage] controlled by the controller.
   final int height;
 
@@ -140,6 +144,7 @@ class PixelImageController extends ValueNotifier<_PixelImageValue> {
   PixelImageController({
     ByteData? pixels,
     this.palette,
+    this.customGradientEquation,
     Color? bgColor,
     required this.width,
     required this.height,

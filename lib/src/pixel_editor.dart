@@ -59,7 +59,15 @@ class _PixelEditorState extends State<PixelEditor> {
 
   @override
   void initState() {
-    _selectedColor = _finalColor = sampleRainbowColor(1.0);
+    Color color = sampleRainbowColor(1.0);
+
+    if (widget.controller.palette != null) {
+      color = widget.controller.palette!.colors.first;
+    } else if (widget.controller.customGradientEquation != null) {
+      color = widget.controller.customGradientEquation!(1.0);
+    }
+
+    _selectedColor = _finalColor = color;
 
     super.initState();
   }
@@ -79,6 +87,8 @@ class _PixelEditorState extends State<PixelEditor> {
             ),
             if (widget.controller.palette != null) ...[
               makePaletteColorPicker(isHorizontal),
+            ] else if (widget.controller.customGradientEquation != null) ...[
+              makeCustomGradientPicker(isHorizontal),
             ] else ...[
               makeLumenGradientPicker(isHorizontal),
               makeRainbowGradientPicker(isHorizontal),
@@ -100,6 +110,20 @@ class _PixelEditorState extends State<PixelEditor> {
               widget.controller.palette!.colors[_selectedColorIndex];
         });
       },
+    );
+  }
+
+  // uses a custom gradient picker
+  Widget makeCustomGradientPicker(bool isHorizontal) {
+    return GradientColorPicker(
+      equation: widget.controller.customGradientEquation!,
+      onSelected: (color) {
+        setState(() {
+          _finalColor = color;
+        });
+      },
+      direction: isHorizontal ? Axis.vertical : Axis.horizontal,
+      sliderStartOffset: 1.0,
     );
   }
 
